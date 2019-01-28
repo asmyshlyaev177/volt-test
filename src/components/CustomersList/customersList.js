@@ -14,7 +14,7 @@ class CustomersList extends React.Component {
         this.closeModal = this.closeModal.bind(this);
         this.editCustomer = this.editCustomer.bind(this);
         this.createCustomer = this.createCustomer.bind(this);
-        this.removeCustomer = this.removeCustomer.bind(this);
+        this.removeCustomer = this. emoveCustomer.bind(this);
         this.setField = this.setField.bind(this);
         this.send = this.send.bind(this);
         this.closeConfirmModal = this.closeConfirmModal.bind(this);

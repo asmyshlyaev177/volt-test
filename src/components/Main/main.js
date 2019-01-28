@@ -42,7 +42,8 @@ class Main extends React.Component {
 
     getChildContext() {
         return {
-            setCustomers: this.setCustomers
+            setCustomers: this.setCustomers,
+            setProducts: this.setProducts
         };
     };
 
