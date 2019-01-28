@@ -1,43 +1,63 @@
 import React from 'react';
-import { Modal as Mod, OverlayTrigger , Button } from 'react-bootstrap';
+import {
+    Modal as Mod,
+    Button,
+    FormGroup,
+    ControlLabel,
+    FormControl,
+ } from 'react-bootstrap';
 
 class Modal extends React.Component {
-    constructor(props, context) {
-      super(props, context);
-  
-      this.handleShow = this.handleShow.bind(this);
-      this.handleClose = this.handleClose.bind(this);
-  
-      this.state = {
-        show: false
-      };
+
+    editName = ev => {
+        const { setField } = this.props;
+        setField('name', ev.target.value);
     }
-  
-    handleClose() {
-      this.setState({ show: false });
+    editAddress = ev => {
+        const { setField } = this.props;
+        setField('address', ev.target.value);
     }
-  
-    handleShow() {
-      this.setState({ show: true });
+    editPhone = ev => {
+        const { setField } = this.props;
+        setField('phone', ev.target.value);
     }
   
     render() {
+        const { address, name, phone, id, show, close, send } = this.props;
+        const isNewEntry = id === null;
+        const title = isNewEntry ? 'Add customer' : `Edit customer ${id}`;
+        const btn = isNewEntry ? 'Add' : 'Save';
 
       return (
-          <Mod show={this.state.show} onHide={this.handleClose}>
+          <Mod show={show} onHide={close}>
             <Mod.Header closeButton>
-              <Mod.Title>Mod heading</Mod.Title>
+              <Mod.Title>{ title }</Mod.Title>
             </Mod.Header>
-            
+
             <Mod.Body>
-              <h4>Text in a Mod</h4>
-              <p>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </p>
+              <FormGroup>
+                <ControlLabel>Name</ControlLabel>
+                <FormControl type="text"
+                  onChange={this.editName}
+                  value={name || ''}
+                />
+                <ControlLabel>Address</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={this.editAddress}
+                  value={address || ''}
+                />
+                <ControlLabel>Phone</ControlLabel>
+                <FormControl
+                  type="text"
+                  onChange={this.editPhone}
+                  value={phone || ''}
+                />
+              </FormGroup>
             </Mod.Body>
 
             <Mod.Footer>
-              <Button onClick={this.handleClose}>Close</Button>
+              <Button onClick={send}>{btn}</Button>
             </Mod.Footer>
           </Mod>
       );

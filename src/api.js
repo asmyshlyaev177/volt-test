@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const baseUri = '/api';
-const customers = 'customers';
+const customers = (id = '') => `customers/${id}`;
 
-const instance = ({ method = 'get', url = '/', data = {}}) => {
+const instance = ({ method = 'get', url = '/', data = null }) => {
     const { protocol, port, hostname } = window.location;
     return axios({
         method,
@@ -16,8 +16,16 @@ const instance = ({ method = 'get', url = '/', data = {}}) => {
 const api = {
     instance,
     customers: {
-        get: () => instance({ url: customers }),
-        post: data => instance({ url: customers, data })
+        get: () => instance({ url: customers() }),
+        create: data => {
+            return instance({ url: customers(), method: 'post', data });
+        },
+        edit: (id, data) => {
+            return instance({ url: customers(id), method: 'put', data });
+        },
+        delete: id => {
+            return instance({ url: customers(id), method: 'delete' });
+        },
     },
 };
 

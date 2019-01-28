@@ -1,19 +1,31 @@
 import React from 'react';
-import { Table as Tab } from 'react-bootstrap';
+import { Table as Tab, Button} from 'react-bootstrap';
 
-const Customer = ({ ind, name, address, phone, onClick}) => (
-    <tr>
-        <td>{ind}</td>
-        <td>{name}</td>
-        <td>{address}</td>
-        <td>{phone}</td>
-        <td>Edit</td>
-    </tr>
-);
+const Customer = ({ ind, id, name, address, phone, edit, remove }) => {
+
+    const editHandler = () => {
+        if (isNaN(parseInt(id))) return false;
+        edit(id);
+    }
+    const removeHandler = () => remove(id);
+
+    return (
+        <tr>
+            <td>{ind}</td>
+            <td>{name}</td>
+            <td>{address}</td>
+            <td>{phone}</td>
+            <td>
+                <Button onClick={editHandler}>Edit</Button>
+                <Button onClick={removeHandler}>Remove</Button>
+                </td>
+        </tr>
+    );
+};
 
 class Table extends React.Component {
     render() {
-        const { data } = this.props;
+        const { data, edit, remove } = this.props;
         return (
             <Tab responsive>
                 <thead>
@@ -27,7 +39,7 @@ class Table extends React.Component {
                 </thead>
                 <tbody>
                     { data && data.map((el, ind) => (
-                        <Customer key={ind} {...el} ind={ind} />
+                        <Customer key={ind} {...el} ind={ind} edit={edit} remove={remove} />
                     ))}
 
                 </tbody>
