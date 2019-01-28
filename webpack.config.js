@@ -38,7 +38,26 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel'
+      loader: 'babel',
+      query: {
+        presets: [
+          'react',
+          'stage-0',
+          'es2015',
+        ],
+        plugins: [
+          ['react-transform', {
+            'transforms': [{
+              'transform': 'react-transform-hmr',
+              'imports': ['react'],
+              'locals': ['module']
+            }]
+          }],
+          ['transform-class-properties'],
+          ['transform-runtime'],
+          ['transform-decorators-legacy']
+        ]
+      }
     }, {
       test: /\.css$/,
       loader: 'style!css'
