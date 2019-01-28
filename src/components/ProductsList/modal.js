@@ -21,7 +21,7 @@ class Modal extends React.Component {
     render() {
         const { price, name, id, show, close, send } = this.props;
         const isNewEntry = id === null;
-        const title = isNewEntry ? 'Add customer' : `Edit customer ${id}`;
+        const title = isNewEntry ? 'Add product' : `Edit product ${id}`;
         const btn = isNewEntry ? 'Add' : 'Save';
 
       return (
