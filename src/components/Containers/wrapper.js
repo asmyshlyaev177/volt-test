@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, PageHeader } from 'react-bootstrap';
+import {Button, PageHeader} from 'react-bootstrap';
 
 class Wrapper extends React.Component {
   constructor(props) {
@@ -23,86 +23,81 @@ class Wrapper extends React.Component {
       showModal: false,
       confirmModal: false,
       newEntry: {
-        customer_id: null,
-        discount: null,
-        total: null,
-        name: null,
-        address: null,
-        phone: null,
-        price: null,
-        id: null
-      }
+        // Fields for all childrens:
+        // customer_id, discount, total, name, address, phone, price, id
+      },
     };
-  };
+  }
 
   componentWillMount() {
     this.get();
-  };
+  }
 
   setField = (field, val) => {
-    const { newEntry } = this.state;
-    this.setState({ newEntry: { ...newEntry, [field]: val} });
+    const {newEntry} = this.state;
+    this.setState({newEntry: {...newEntry, [field]: val}});
   };
 
   closeModal() {
-    console.log('close');
-    this.setState({ showModal: false });
+    this.setState({showModal: false});
   }
 
   clearData() {
-    const { newEntry: entry } = this.state;
-    const newEntry = { ...entry };
+    const {newEntry: entry} = this.state;
+    const newEntry = {...entry};
     Object.keys(newEntry).forEach(k => {
-      newEntry[k] = null; 
+      newEntry[k] = null;
     });
-    this.setState({ newEntry });
+    this.setState({newEntry});
   }
 
   showModal(id) {
-    this.setState({ showModal: true });
+    this.setState({showModal: true});
   }
 
   send = () => {
-    console.log('send');
-    const { newEntry, newEntry: {id} } = this.state;
+    const {
+      newEntry,
+      newEntry: {id},
+    } = this.state;
 
-    const fn = this.mode === 'edit'
-      ? () => this.api.edit(id, newEntry)
-      : () => this.api.create(newEntry);
+    const fn =
+      this.mode === 'edit'
+        ? () => this.api.edit(id, newEntry)
+        : () => this.api.create(newEntry);
 
-    fn()
-      .then(() => {
-        this.clearData();
-        this.closeModal();
-        this.get();
-      })
+    fn().then(() => {
+      this.clearData();
+      this.closeModal();
+      this.get();
+    });
   };
 
   get = () => {
-    this.api.get()
-      .then(res => {
-        this.setState({ data: res.data });
-      });
+    this.api.get().then(res => {
+      this.setState({data: res.data});
+    });
   };
 
   confirm = id => {
-    const { newEntry } = this.state;
-    this.setState({ confirmModal: true, newEntry: { ...newEntry, id } });
+    const {newEntry} = this.state;
+    this.setState({confirmModal: true, newEntry: {...newEntry, id}});
   };
 
   closeConfirmModal = () => {
-    this.setState({ confirmModal: false });
+    this.setState({confirmModal: false});
   };
 
   removeItem = () => {
-    const { newEntry: {id} } = this.state;
+    const {
+      newEntry: {id},
+    } = this.state;
     this.clearData();
     this.closeConfirmModal();
-    this.api.delete(id)
-      .then(() => {
-        this.clearData();
-        this.get();
-      })
+    this.api.delete(id).then(() => {
+      this.clearData();
+      this.get();
+    });
   };
 
   createItem = () => {
@@ -112,18 +107,34 @@ class Wrapper extends React.Component {
   };
 
   editItem = (id = 0) => {
-    const { data } = this.state;
+    const {data} = this.state;
     const elem = data.find(el => el.id === id);
     this.mode = 'edit';
     this.clearData();
 
-    this.setState({ newEntry: { ...elem } }, () => this.showModal());
+    this.setState({newEntry: {...elem}}, () => this.showModal());
   };
 
   render() {
-    const { data, newEntry, showModal: status, confirmModal: statusModal } = this.state;
-    const { editItem, confirm, confirmModal, createItem, closeConfirmModal, removeItem, send, setField, showModal, closeModal } = this;
-    const { render, title } = this.props;
+    const {
+      data,
+      newEntry,
+      showModal: status,
+      confirmModal: statusModal,
+    } = this.state;
+    const {
+      editItem,
+      confirm,
+      confirmModal,
+      createItem,
+      closeConfirmModal,
+      removeItem,
+      send,
+      setField,
+      showModal,
+      closeModal,
+    } = this;
+    const {render, title} = this.props;
     const propsRender = {
       status,
       send,
@@ -137,7 +148,7 @@ class Wrapper extends React.Component {
       showModal,
       closeModal,
       closeConfirmModal,
-      setField
+      setField,
     };
 
     return (
@@ -145,18 +156,16 @@ class Wrapper extends React.Component {
         <PageHeader>
           {title}
           <small>
-            <Button
-              onClick={createItem}
-              style={{marginLeft: '20px'}}>
+            <Button onClick={createItem} style={{marginLeft: '20px'}}>
               Create
             </Button>
           </small>
         </PageHeader>
 
-        { render(propsRender) }
+        {render(propsRender)}
       </div>
-      );
-  };
-};
+    );
+  }
+}
 
-export { Wrapper }; 
+export {Wrapper};
