@@ -23,23 +23,23 @@ class Main extends React.Component {
         return (
             <Grid>
                 <Router>
-                        <div>
-                            <Menu />
-                            <Route exact path="/" component={Invoices} />
-                            <Route path="/invoices" component={Invoices} />
-                            <Route
-                                path="/products"
-                                render={
-                                    props => <Products {...props} />
-                                }
-                            />
-                            <Route
-                                path="/customers"
-                                render={
-                                    props => <Customers {...props} />
-                                }
-                            />
-                        </div>
+                    <div>
+                        <Menu />
+                        <Route exact path="/" component={Invoices} />
+                        <Route path="/invoices" component={Invoices} />
+                        <Route
+                            path="/products"
+                            render={
+                                props => <Products {...props} />
+                            }
+                        />
+                        <Route
+                            path="/customers"
+                            render={
+                                props => <Customers {...props} />
+                            }
+                        />
+                    </div>
                 </Router>
             </Grid>
         );
