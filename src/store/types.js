@@ -1,0 +1,4 @@
+export const SET_PRODUCTS = 'SET_PRODUCTS';
+export const SET_CUSTOMERS = 'SET_CUSTOMERS';
+export const SET_INVOICES = 'SET_INVOICES';
+export const TOGGLE_MODAL = 'TOGGLE_MODAL';

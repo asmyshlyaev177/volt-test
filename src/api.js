@@ -16,18 +16,17 @@ const instance = ({method = 'get', url = '/', data = null}) => {
 };
 
 const api = {
-  instance,
   invoices: {
     get: () => instance({url: invoices()}),
     create: ({discount, total, customer_id}) => {
       const payload = {discount, total, customer_id};
       return instance({url: invoices(), method: 'post', data: payload});
     },
-    edit: (id, data) => {
+    edit: ({id, discount, total, customer_id}) => {
       const payload = {
-        discount: data.discount,
-        total: data.total,
-        customer_id: data.customer_id,
+        discount,
+        total,
+        customer_id,
       };
       return instance({url: invoices(id), method: 'put', data: payload});
     },
@@ -41,11 +40,11 @@ const api = {
       const payload = {name, address, phone};
       return instance({url: customers(), method: 'post', data: payload});
     },
-    edit: (id, data) => {
+    edit: ({id, name, address, phone}) => {
       const payload = {
-        name: data.name,
-        address: data.address,
-        phone: data.phone,
+        name,
+        address,
+        phone,
       };
       return instance({url: customers(id), method: 'put', data: payload});
     },
@@ -59,8 +58,8 @@ const api = {
       const payload = {name, price};
       return instance({url: products(), method: 'post', data: payload});
     },
-    edit: (id, data) => {
-      const payload = {name: data.name, price: data.price};
+    edit: ({id, name, price}) => {
+      const payload = {name, price};
       return instance({url: products(id), method: 'put', data: payload});
     },
     delete: id => {
@@ -69,4 +68,8 @@ const api = {
   },
 };
 
-export {api};
+const apiUrls = Object.keys(api).reduce((acc, val) => {
+  acc[val] = val;
+  return acc;
+}, {});
+export {api, apiUrls};

@@ -2,17 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Wrapper} from '../Containers/Wrapper';
 import {Button, PageHeader} from 'react-bootstrap';
-import {api} from '../../api';
+import {connect} from 'react-redux';
+import {actions} from '../../store/actions';
+import {apiUrls} from '../../api';
 import {Modal} from '../CustomersList/modal';
 import {ModalConfirm} from '../ModalConfirm';
 import {Table} from '../CustomersList/table';
+
+const apiUrl = 'customers';
 
 const CustomersList = props => {
   return (
     <Wrapper
       title="Customers list"
-      api={api.customers}
-      cb={props.cb}
+      api={props.api}
+      data={props.data}
+      showModal={props.showModal}
+      toggleModal={props.toggleModal}
       render={props => (
         <div>
           <Table
@@ -37,5 +43,38 @@ const CustomersList = props => {
     />
   );
 };
+CustomersList.propTypes = {
+  api: PropTypes.object.isRequired,
+  data: PropTypes.array,
+  props: PropTypes.object.isRequired,
+  showModal: PropTypes.bool,
+  toggleModal: PropTypes.func,
+};
+CustomersList.defaultProps = {
+  data: [],
+  showModal: false,
+  toggleModal: () => false,
+};
 
-export {CustomersList};
+const mapStateToProps = state => {
+  return {
+    data: state[apiUrl],
+    showModal: state.modalShow[apiUrl],
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    api: {
+      get: args => dispatch(actions[apiUrl].get(args)),
+      edit: args => dispatch(actions[apiUrl].edit(args)),
+      create: args => dispatch(actions[apiUrl].create(args)),
+      delete: args => dispatch(actions[apiUrl].delete(args)),
+    },
+    toggleModal: val => dispatch(actions.toggleModal(apiUrl, val)),
+  };
+};
+const Connected = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CustomersList);
+export {Connected as CustomersList};

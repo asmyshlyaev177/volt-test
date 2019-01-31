@@ -1,8 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, PageHeader} from 'react-bootstrap';
+import {connect} from 'react-redux';
 
 class Wrapper extends React.Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    render: PropTypes.func.isRequired,
+    api: PropTypes.shape({
+      create: PropTypes.func.isRequired,
+      get: PropTypes.func.isRequired,
+      edit: PropTypes.func.isRequired,
+      delete: PropTypes.func.isRequired,
+    }).isRequired,
+    data: PropTypes.array.isRequired,
+    showModal: PropTypes.bool.isRequired,
+    toggleModal: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.api = props.api;
@@ -19,7 +34,6 @@ class Wrapper extends React.Component {
     this.mode = 'create';
 
     this.state = {
-      data: [],
       showModal: false,
       confirmModal: false,
       newEntry: {
@@ -39,7 +53,7 @@ class Wrapper extends React.Component {
   };
 
   closeModal() {
-    this.setState({showModal: false});
+    this.props.toggleModal(false);
   }
 
   clearData() {
@@ -52,7 +66,7 @@ class Wrapper extends React.Component {
   }
 
   showModal(id) {
-    this.setState({showModal: true});
+    this.props.toggleModal(true);
   }
 
   send = () => {
@@ -63,20 +77,16 @@ class Wrapper extends React.Component {
 
     const fn =
       this.mode === 'edit'
-        ? () => this.api.edit(id, newEntry)
+        ? () => this.api.edit(newEntry)
         : () => this.api.create(newEntry);
 
     fn().then(() => {
-      this.clearData();
       this.closeModal();
-      this.get();
     });
   };
 
   get = () => {
-    this.api.get().then(res => {
-      this.setState({data: res.data});
-    });
+    return this.api.get();
   };
 
   confirm = id => {
@@ -96,18 +106,17 @@ class Wrapper extends React.Component {
     this.closeConfirmModal();
     this.api.delete(id).then(() => {
       this.clearData();
-      this.get();
     });
   };
 
   createItem = () => {
     this.mode = 'create';
     this.clearData();
-    this.showModal();
+    this.props.toggleModal(true);
   };
 
   editItem = (id = 0) => {
-    const {data} = this.state;
+    const {data} = this.props;
     const elem = data.find(el => el.id === id);
     this.mode = 'edit';
     this.clearData();
@@ -116,12 +125,7 @@ class Wrapper extends React.Component {
   };
 
   render() {
-    const {
-      data,
-      newEntry,
-      showModal: status,
-      confirmModal: statusModal,
-    } = this.state;
+    const {newEntry, confirmModal: statusModal} = this.state;
     const {
       editItem,
       confirm,
@@ -134,7 +138,7 @@ class Wrapper extends React.Component {
       showModal,
       closeModal,
     } = this;
-    const {render, title} = this.props;
+    const {data, render, title, showModal: status} = this.props;
     const propsRender = {
       status,
       send,
@@ -167,5 +171,4 @@ class Wrapper extends React.Component {
     );
   }
 }
-
 export {Wrapper};
